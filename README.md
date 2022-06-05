@@ -6,7 +6,8 @@ Group 5 이상윤, 이유진<br/>
 >갤러그는 날아오는 몬스터들을 피하는 게임입니다. 일정 점수가 넘어가면 총알이 생기고, 총알로 목표를 맞추면 추가 점수가 주어집니다.<br/>
 >목숨은 3개입니다. 게임은 70초간 진행됩니다.<br/>
 >
-![KakaoTalk_20220605_213029003](https://user-images.githubusercontent.com/101650598/172050575-b523ecd1-9ef9-4f94-8984-8e648dc84187.png)
+![KakaoTalk_20220605_213410231](https://user-images.githubusercontent.com/101650598/172050708-fd12f79b-3fce-4a3f-bd05-cb9da5fb474e.png)
+
         
 # 두 번째 게임(펌프 잇 업)<br/> 
 >펌프 잇 업은 리듬에 맞추어 4방향의 화살표를 입력하는 게임입니다.<br/>
