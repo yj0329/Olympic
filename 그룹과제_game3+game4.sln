@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "그룹과제_game3+game4", "그룹과제_game3+game4.vcxproj", "{ED53C21F-9B8D-46B2-ABAD-0B1A2E7DA533}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Olympic_Installer", "..\Olympic\Olympic.vdproj", "{A6D7A15F-9A4B-4DC4-A5A7-94FA15BDEF14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{ED53C21F-9B8D-46B2-ABAD-0B1A2E7DA533}.Release|x64.Build.0 = Release|x64
 		{ED53C21F-9B8D-46B2-ABAD-0B1A2E7DA533}.Release|x86.ActiveCfg = Release|Win32
 		{ED53C21F-9B8D-46B2-ABAD-0B1A2E7DA533}.Release|x86.Build.0 = Release|Win32
+		{A6D7A15F-9A4B-4DC4-A5A7-94FA15BDEF14}.Debug|x64.ActiveCfg = Debug
+		{A6D7A15F-9A4B-4DC4-A5A7-94FA15BDEF14}.Debug|x86.ActiveCfg = Debug
+		{A6D7A15F-9A4B-4DC4-A5A7-94FA15BDEF14}.Release|x64.ActiveCfg = Release
+		{A6D7A15F-9A4B-4DC4-A5A7-94FA15BDEF14}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1011,6 +1011,3 @@ int main() {
 	//게임 시작
 	startGame(opening);
 }
-
-//Second getTimer(TimerID timer);
-//line 202 버퍼 오버런
