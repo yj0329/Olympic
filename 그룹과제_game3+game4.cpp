@@ -9,7 +9,7 @@
 
 
 //공통
-int stage = 20, score_total;
+int stage = 0, score_total;
 SceneID opening, game1_title, game2_title, game3_title, game4_title, fail, ending;
 ObjectID startbutton, restartbutton, endbutton;
 TimerID timer_title;
@@ -64,15 +64,15 @@ const char* tar_g1[6] = { "Images/target.png","Images/target.png" ,"Images/targe
 
 //game2 변수
 SceneID game2;
-ObjectID arrow_g2[25];
-TimerID timer_arrow_g2;
+ObjectID arrow_g2[25], arrow_g2_[4];
+TimerID timer_arrow_g2, timer_main_g2;
 int score_g2 = 0, arrow_dir_g2[25], arrow_num_g2 = 0, arrow_x_g2[25], arrow_y_g2[25], keystate_g2 = 4;
 
 
 //game3 변수
 SceneID game3;
 ObjectID ball_g3, stick_g3, block_g3[10][5], ball_1_g3, ball_2_g3;
-TimerID timer_ball_g3, timer_stick_g3, timer_delay_g3, timer_main_g3;
+TimerID timer_ball_g3, timer_stick_g3, timer_delay_g3, timer_main_g3, fail_end;
 int ball_x_g3 = 626, ball_y_g3 = 130, ball_dx_g3 = 5, ball_dy_g3 = 5, stick_x_g3 = 580, block_x_g3[10][5], block_y_g3[10][5], stick_dir_g3, life_g3 = 3, score_g3 = 0;
 bool block_state_g3[10][5] = { false }, borken_g3 = false;
 
@@ -91,7 +91,7 @@ time_t start_g4, end_g4;
 
 
 //game2 함수
-bool check_arrow_g2(void);
+void hide_arrow_g2(void);
 
 //game3 함수
 bool bounceBall_stick_g3(void);
@@ -155,43 +155,57 @@ int shooting(int i) {
 
 
 //game2
-bool check_arrow_g2(void) {
+void  hide_arrow_g2(void) {
 
 	for (int i = 0; i < 25; i++) {
 		switch (arrow_dir_g2[i]) {
 		case 0: //위
 			if (arrow_y_g2[i] == 460) {
+				if (keystate_g2 == 0) {
+					score_g2 += 400;
+					//showMessage("점수 획득");
+				}
 				hideObject(arrow_g2[i]);
-				if (keystate_g2 == 0) return true;
-				else return false;
+
 		    }
 			break;
 		case 1: //오른쪽
 			if (arrow_x_g2[i] == 740) {
+				if (keystate_g2 == 1) {
+					score_g2 += 400;
+					//showMessage("점수 획득");
+				}
 				hideObject(arrow_g2[i]);
-				if (keystate_g2 == 1) return true;
-				else return false;
+
 			}
 			break;
 		case 2: //아래
 			if (arrow_y_g2[i] == 140) {
+				if (keystate_g2 == 2) {
+					score_g2 += 400;
+					//showMessage("점수 획득");
+				}
 				hideObject(arrow_g2[i]);
-				if (keystate_g2 == 2) return true;
-				else return false;
+
 			}
 			break;
 		case 3:  //왼쪽
 			if (arrow_x_g2[i] == 420) {
+				if (keystate_g2 == 3) {
+					score_g2 += 400;
+					//showMessage("점수 획득");
+				}
 				hideObject(arrow_g2[i]);
-				if (keystate_g2 == 3) return true;
-				else return false;
+
 			}
 			break;
 		}
-		return true;
+
 	}
 
 }
+
+
 
 //game3
 bool check_clear_g3(void) {
@@ -310,7 +324,7 @@ void game_ending(void) {
 	score_g4 += 5000;
 	score_g4 -= 100 * difftime(start_g4, end_g4);
 
-	score_total = score_g3 + score_g4;
+	score_total = score_g1 + score2_g1+score_g3 + score_g4;
 	char buff[30];
 	sprintf(buff, "score: %d", score_total);
 
@@ -320,20 +334,17 @@ void game_ending(void) {
 
 void game_fail(void) {
 	locateObject(restartbutton, fail, 295, 250);
-	showObject(restartbutton);
+	//showObject(restartbutton);
 
 	locateObject(endbutton, fail, 800, 250);
-	showObject(endbutton);
+	//showObject(endbutton);
 
 	enterScene(fail);
 
 	stage = 60;
+	
+	startTimer(fail_end);
 
-	score_total = score_g3;
-	char buff[30];
-	sprintf(buff, "score: %d", score_total);
-
-	showMessage(buff);
 }
 
 void setGame(void) {
@@ -391,9 +402,22 @@ ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown
 //Callback
 void keyboardCallback(KeyCode keycode, KeyState keystate) {
 	
-	//game2
+	//game1
+	if (stage == 10) {
+		if (keycode == KeyCode::KEY_RIGHT_ARROW) {
+			speed_g1 += 1;
+		}
+		else if (keycode == KeyCode::KEY_LEFT_ARROW) {
+			speed_g1 -= 1;
+		}
+		else if (keycode == KeyCode::KEY_UP_ARROW) {
+			speed2_g1 += 20;
+		}
 
-	if (stage == 20){
+	}
+
+	//game2
+	else if (stage == 20){
 		if (keycode == KeyCode::KEY_UP_ARROW && keystate == KeyState::KEY_PRESSED) { //위
 			keystate_g2 = 0;
 		}
@@ -410,6 +434,7 @@ void keyboardCallback(KeyCode keycode, KeyState keystate) {
 			keystate_g2 = 4;
 	}
 
+	
 	//game3
 	else if (stage == 30) {
 		if (keycode == KeyCode::KEY_RIGHT_ARROW && keystate == KeyState::KEY_PRESSED) stick_dir_g3 = 1;
@@ -457,7 +482,9 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	}
 	else if (stage == 0) {
 		if (object == startbutton) {
-			enterScene(game2_title);
+			enterScene(game1_title);
+			setTimer(timer_title, 2.f);
+			startTimer(timer_title);
 		}
 	}
 }
@@ -467,11 +494,21 @@ void timerCallback(TimerID timer) {
 	//공통
 	if (timer == timer_title) {
 		switch (stage) {
+		case 0:
+			enterScene(game1_title);
+			stage = 10;
+			setTimer(timer_title, 2.f);
+			startTimer(timer_title);
+			break;
 		case 10:
 			enterScene(scene1_g1);
+			startTimer(timer2_g1);  
+			startTimer(timer1_g1);
+			break;
 
 		case 20:
 			enterScene(game2);
+			startTimer(timer_main_g2);
 			setTimer(timer_arrow_g2, 0.01f);
 			startTimer(timer_arrow_g2);
 			break;
@@ -570,11 +607,11 @@ void timerCallback(TimerID timer) {
 						else if (count_g1 == 1) {
 							count_g1--;
 							enemySpeed_g1 = 0;
-							enterScene(scene2_g1);
+							enterScene(game2_title);
+							stage = 20;
+							setTimer(timer_title, 2.f);
+							startTimer(timer_title);
 							stopTimer(timer2_g1);
-							char buf[30];
-							sprintf(buf, "score : %d", score_g1 + score2_g1);
-							showMessage(buf);
 						}
 					}
 				}
@@ -590,10 +627,11 @@ void timerCallback(TimerID timer) {
 		if (timer == timer2_g1 && count_g1 > 0) {
 			enemySpeed_g1 = 0;
 			stopTimer(timer1_g1);
-			enterScene(scene2_g1);
-			char buf[30];
-			sprintf(buf, "score : %d", score_g1 + score2_g1);
-			showMessage(buf);
+			enterScene(game2_title);
+			stage = 20;
+			setTimer(timer_title, 2.f);
+			startTimer(timer_title);
+
 		}
 
 
@@ -602,23 +640,30 @@ void timerCallback(TimerID timer) {
 	//game2
 	else if (stage == 20) {
 		if (timer == timer_arrow_g2) {
-
+			hide_arrow_g2();
 			for (int i = 0; i < 25; i++) {
 				switch (arrow_dir_g2[i]) {
-				case 0: arrow_y_g2[i] -= 10; break;//위
-				case 1: arrow_x_g2[i] -= 10; break;//오른쪽
-				case 2: arrow_y_g2[i] += 10; break;//아래
-				case 3: arrow_x_g2[i] += 10; break;//왼쪽
+				case 0: arrow_y_g2[i] -= 5; break;//위
+				case 1: arrow_x_g2[i] -= 5; break;//오른쪽
+				case 2: arrow_y_g2[i] += 5; break;//아래
+				case 3: arrow_x_g2[i] += 5; break;//왼쪽
 				}
 
 				locateObject(arrow_g2[i], game2, arrow_x_g2[i], arrow_y_g2[i]);
 			}
-			bool temp = check_arrow_g2();
+			//bool temp = check_arrow_g2();
 
 			setTimer(timer_arrow_g2, 0.01f);
 			startTimer(timer_arrow_g2);
 		}
+		else if (timer == timer_main_g2) {
+			enterScene(game3_title);
+			stage = 30;
+			setTimer(timer_title, 2.f);
+			startTimer(timer_title);
+		}
 	}
+	
 	
 
 	//game3
@@ -701,6 +746,10 @@ void timerCallback(TimerID timer) {
 			 startTimer(timer_title);
 		 }
 
+	}
+
+	else if (timer == fail_end) {
+		endGame();
 	}
 	
 
@@ -804,9 +853,7 @@ int main() {
 	timer_title = createTimer(2.f);
     startTimer(timer_title);
 
-	startbutton = createObject("Images/startbutton.png");
-	locateObject(startbutton, opening, 540, 100);
-	showObject(startbutton);
+	//startbutton = createObject("Images/startbutton.png", opening, 540,100);
 
 	restartbutton = createObject("Images/restartbutton.png");
 
@@ -818,7 +865,6 @@ int main() {
 	timer1_g1 = createTimer(ANIMATION_TIME);
 	startTimer(timer1_g1);
 	timer2_g1 = createTimer(GAME_TIME);
-	startTimer(timer2_g1);
 	scene2_g1 = createScene("갤러그점수");
 	ship_g1 = createObject("Images/ship.png", scene1_g1, x_g1, y_g1);
 	for (int i = 0; i < 3; i++) {
@@ -848,6 +894,15 @@ int main() {
 
 	//game2
 	game2 = createScene("game2", "Images/background.png");
+
+	arrow_g2_[0] = createObject("Images/arrow_up.png", game2, 580, 460, true);
+	//상
+	arrow_g2_[1] = createObject("Images/arrow_left.png", game2, 420, 300, true);
+	//좌
+	arrow_g2_[2] = createObject("Images/arrow_down.png", game2, 580, 140, true);
+	//하
+	arrow_g2_[3] = createObject("Images/arrow_right.png", game2, 740, 300, true);
+	//우
 	
 	for (int i = 0; i < 25; i++) {
 		arrow_dir_g2[i] = (int) (rand() % 4);
@@ -866,6 +921,9 @@ int main() {
 
 	timer_arrow_g2 = createTimer(0.01f);
 	//startTimer(timer_arrow_g2);
+
+	timer_main_g2 = createTimer(60.f);
+	
 
 
 	//game3
@@ -912,6 +970,8 @@ int main() {
 
 	timer_main_g3 = createTimer(60.f);
 
+	fail_end = createTimer(2.f);
+
 
 	//game4
 	game4 = createScene("game4", "Images/background_game4.png");
@@ -949,7 +1009,7 @@ int main() {
 	
 
 	//게임 시작
-	startGame(game2_title);
+	startGame(opening);
 }
 
 //Second getTimer(TimerID timer);
