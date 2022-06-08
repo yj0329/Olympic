@@ -167,7 +167,7 @@ void  hide_arrow_g2(void) {
 				}
 				hideObject(arrow_g2[i]);
 
-		    }
+			}
 			break;
 		case 1: //오른쪽
 			if (arrow_x_g2[i] == 740) {
@@ -220,14 +220,18 @@ bool check_clear_g3(void) {
 bool check_corner_g3(int i, int j) {
 
 	if ((block_x_g3[i][j] - ball_x_g3 - 15) * (block_x_g3[i][j] - ball_x_g3 - 15) + (block_y_g3[i][j] + 30 - ball_y_g3 - 15) * (block_y_g3[i][j] + 30 - ball_y_g3 - 15) <= 255) {//왼쪽 위
-		ball_dx_g3 = -5; ball_dy_g3 = 5; return true; 
-	} else if ((block_x_g3[i][j] + 60 - ball_x_g3 - 15) * (block_x_g3[i][j] + 60 - ball_x_g3 - 15) + (block_y_g3[i][j] + 30 - ball_y_g3 - 15) * (block_y_g3[i][j] + 30 - ball_y_g3 - 15) <= 255) {  //오른쪽 위
-		ball_dx_g3 = 5; ball_dy_g3 = 5; return true; 
-	} else if ((block_x_g3[i][j] + 60 - ball_x_g3 - 15) * (block_x_g3[i][j] + 60 - ball_x_g3 - 15) + (block_y_g3[i][j] - ball_y_g3 - 15) * (block_y_g3[i][j] - ball_y_g3 - 15) <= 255) { // 오른쪽 아래
-		ball_dx_g3 = 5; ball_dy_g3 = -5; return true; 
-	} else if ((block_x_g3[i][j] - ball_x_g3 - 15) * (block_x_g3[i][j] - ball_x_g3 - 15) + (block_y_g3[i][j] - ball_y_g3 - 15) * (block_y_g3[i][j] - ball_y_g3 - 15) <= 255) { // 왼쪽 아래
-		ball_dx_g3 = -5; ball_dy_g3 = -5; return true; 
-	} else return false;
+		ball_dx_g3 = -5; ball_dy_g3 = 5; return true;
+	}
+	else if ((block_x_g3[i][j] + 60 - ball_x_g3 - 15) * (block_x_g3[i][j] + 60 - ball_x_g3 - 15) + (block_y_g3[i][j] + 30 - ball_y_g3 - 15) * (block_y_g3[i][j] + 30 - ball_y_g3 - 15) <= 255) {  //오른쪽 위
+		ball_dx_g3 = 5; ball_dy_g3 = 5; return true;
+	}
+	else if ((block_x_g3[i][j] + 60 - ball_x_g3 - 15) * (block_x_g3[i][j] + 60 - ball_x_g3 - 15) + (block_y_g3[i][j] - ball_y_g3 - 15) * (block_y_g3[i][j] - ball_y_g3 - 15) <= 255) { // 오른쪽 아래
+		ball_dx_g3 = 5; ball_dy_g3 = -5; return true;
+	}
+	else if ((block_x_g3[i][j] - ball_x_g3 - 15) * (block_x_g3[i][j] - ball_x_g3 - 15) + (block_y_g3[i][j] - ball_y_g3 - 15) * (block_y_g3[i][j] - ball_y_g3 - 15) <= 255) { // 왼쪽 아래
+		ball_dx_g3 = -5; ball_dy_g3 = -5; return true;
+	}
+	else return false;
 }
 
 bool bounceBall_stick_g3(void) {
@@ -311,9 +315,9 @@ void bounceBall_block_g3(void) {
 void game_ending(void) {
 
 	locateObject(restartbutton, ending, 295, 250);
-	showObject(restartbutton);
+	//showObject(restartbutton);
 
-	locateObject(endbutton, ending, 800, 250);
+	locateObject(endbutton, ending, 610, 250);
 	showObject(endbutton);
 
 	enterScene(ending);
@@ -324,7 +328,7 @@ void game_ending(void) {
 	score_g4 += 5000;
 	score_g4 -= 100 * difftime(start_g4, end_g4);
 
-	score_total = score_g1 + score2_g1+score_g3 + score_g4;
+	score_total = score_g1 + score_g2 + score_g3 + score_g4;
 	char buff[30];
 	sprintf(buff, "score: %d", score_total);
 
@@ -342,7 +346,7 @@ void game_fail(void) {
 	enterScene(fail);
 
 	stage = 60;
-	
+
 	startTimer(fail_end);
 
 }
@@ -354,7 +358,7 @@ void setGame(void) {
 	//game3
 	ball_x_g3 = 626, ball_y_g3 = 130, ball_dx_g3 = 5, ball_dy_g3 = 5, stick_x_g3 = 580;
 	borken_g3 = false;
-	block_state_g3[10][5] = { false }; 
+	block_state_g3[10][5] = { false };
 	life_g3 = 3, score_g3 = 0;
 
 	for (int i = 0; i < 10; i++) {
@@ -401,7 +405,7 @@ ObjectID createObject(const char* image, SceneID scene, int x, int y, bool shown
 
 //Callback
 void keyboardCallback(KeyCode keycode, KeyState keystate) {
-	
+
 	//game1
 	if (stage == 10) {
 		if (keycode == KeyCode::KEY_RIGHT_ARROW) {
@@ -417,7 +421,7 @@ void keyboardCallback(KeyCode keycode, KeyState keystate) {
 	}
 
 	//game2
-	else if (stage == 20){
+	else if (stage == 20) {
 		if (keycode == KeyCode::KEY_UP_ARROW && keystate == KeyState::KEY_PRESSED) { //위
 			keystate_g2 = 0;
 		}
@@ -434,7 +438,7 @@ void keyboardCallback(KeyCode keycode, KeyState keystate) {
 			keystate_g2 = 4;
 	}
 
-	
+
 	//game3
 	else if (stage == 30) {
 		if (keycode == KeyCode::KEY_RIGHT_ARROW && keystate == KeyState::KEY_PRESSED) stick_dir_g3 = 1;
@@ -502,7 +506,7 @@ void timerCallback(TimerID timer) {
 			break;
 		case 10:
 			enterScene(scene1_g1);
-			startTimer(timer2_g1);  
+			startTimer(timer2_g1);
 			startTimer(timer1_g1);
 			break;
 
@@ -663,12 +667,12 @@ void timerCallback(TimerID timer) {
 			startTimer(timer_title);
 		}
 	}
-	
-	
+
+
 
 	//game3
 	else if (stage == 30) {
-		 if (timer == timer_ball_g3) {
+		if (timer == timer_ball_g3) {
 
 			if (check_clear_g3()) {
 				enterScene(game4_title);
@@ -688,7 +692,7 @@ void timerCallback(TimerID timer) {
 			ball_y_g3 += ball_dy_g3;
 
 			locateObject(ball_g3, game3, ball_x_g3, ball_y_g3);
-			
+
 			if (temp) {
 				setTimer(timer_ball_g3, 0.01f);
 				startTimer(timer_ball_g3);
@@ -716,7 +720,7 @@ void timerCallback(TimerID timer) {
 				}
 			}
 
-		 }
+		}
 		else if (timer == timer_stick_g3) {
 
 			if (stick_dir_g3 == -1) stick_x_g3 -= 10;
@@ -731,29 +735,29 @@ void timerCallback(TimerID timer) {
 			startTimer(timer_stick_g3);
 
 		}
-		else if (timer == timer_delay_g3) { 
-			 setTimer(timer_main_g3, 60.f);
-			 startTimer(timer_ball_g3); 
-			 startTimer(timer_main_g3); 
-			 startTimer(timer_stick_g3);
+		else if (timer == timer_delay_g3) {
+			setTimer(timer_main_g3, 60.f);
+			startTimer(timer_ball_g3);
+			startTimer(timer_main_g3);
+			startTimer(timer_stick_g3);
 
 		}
 		else if (timer == timer_main_g3) {
-			 enterScene(game4_title);
+			enterScene(game4_title);
 
-			 stage = 41;
-			 setTimer(timer_title, 2.f);
-			 startTimer(timer_title);
-		 }
+			stage = 41;
+			setTimer(timer_title, 2.f);
+			startTimer(timer_title);
+		}
 
 	}
 
 	else if (timer == fail_end) {
 		endGame();
 	}
-	
 
-	
+
+
 	//game4
 	else if (stage == 41 || stage == 42) {
 		if (timer == timer_hurdle_g4) {
@@ -778,17 +782,17 @@ void timerCallback(TimerID timer) {
 			}
 			setTimer(timer_hurdle_g4, 0.01f);
 			startTimer(timer_hurdle_g4);
-	    }
+		}
 		else if (timer == timer_track_g4) {
 
 			if (track_x_g4 >= 630) {
 				track_x_g4 -= 10;
 				locateObject(track_g4, game4, track_x_g4, 150);
-				
+
 				if (animation_g4) setObjectImage(ball_g4, "Images/running/오_큰거.png");
 				else setObjectImage(ball_g4, "Images/running/왼_큰거.png");
 				animation_g4 = !animation_g4;
-				
+
 				setTimer(timer_track_g4, 0.01f);
 				startTimer(timer_track_g4);
 			}
@@ -821,9 +825,9 @@ void timerCallback(TimerID timer) {
 				startTimer(timer_ani_g4);
 			}
 		}
-	
+
 	}
-	
+
 }
 
 
@@ -851,7 +855,7 @@ int main() {
 	ending = createScene("ending", "Images/ending.png");
 
 	timer_title = createTimer(2.f);
-    startTimer(timer_title);
+	startTimer(timer_title);
 
 	//startbutton = createObject("Images/startbutton.png", opening, 540,100);
 
@@ -859,7 +863,7 @@ int main() {
 
 	endbutton = createObject("Images/endbutton.png");
 
-	
+
 	//game1
 	scene1_g1 = createScene("갤러그");
 	timer1_g1 = createTimer(ANIMATION_TIME);
@@ -903,9 +907,9 @@ int main() {
 	//하
 	arrow_g2_[3] = createObject("Images/arrow_right.png", game2, 740, 300, true);
 	//우
-	
+
 	for (int i = 0; i < 25; i++) {
-		arrow_dir_g2[i] = (int) (rand() % 4);
+		arrow_dir_g2[i] = (int)(rand() % 4);
 
 		switch (arrow_dir_g2[i]) {
 		case 0: arrow_x_g2[i] = 580; arrow_y_g2[i] = i * 200 + 720; arrow_g2[i] = createObject("Images/arrow_up.png"); break;//위
@@ -916,14 +920,14 @@ int main() {
 
 		locateObject(arrow_g2[i], game2, arrow_x_g2[i], arrow_y_g2[i]);
 		showObject(arrow_g2[i]);
-		
- 	}
+
+	}
 
 	timer_arrow_g2 = createTimer(0.01f);
 	//startTimer(timer_arrow_g2);
 
-	timer_main_g2 = createTimer(60.f);
-	
+	timer_main_g2 = createTimer(25.f);
+
 
 
 	//game3
@@ -975,7 +979,7 @@ int main() {
 
 	//game4
 	game4 = createScene("game4", "Images/background_game4.png");
-	
+
 
 	track_g4 = createObject("Images/track.png");
 	locateObject(track_g4, game4, 1300, 150);
@@ -1003,10 +1007,10 @@ int main() {
 
 	timer_ball_g4 = createTimer(0.01f);
 	timer_hurdle_g4 = createTimer(0.01f);
-    timer_track_g4 = createTimer(0.01f);
+	timer_track_g4 = createTimer(0.01f);
 	timer_ani_g4 = createTimer(0.05f);
 
-	
+
 
 	//게임 시작
 	startGame(opening);
